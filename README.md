@@ -304,7 +304,7 @@ git push origin v0.7.0
 
 或在 Actions 手动运行 **Publish VS Code Extension**。勾选 `dry_run` 只打包并上传 VSIX，不发布商店。
 
-一次性本地发布仍可用 PAT：先设置 `VSCE_PUBLISHER` 和 `VSCE_PAT`，再执行 `npm run publish:marketplace`。长期发布建议走 OIDC 工作流。
+如果 OIDC 返回 `The requested publisher doesn't exist`，先确认 publisher 已在 Marketplace 创建并验证，且 Trusted Publishing policy 已创建。临时发布可先在 GitHub Actions Secrets 添加 `VSCE_PAT`（Azure DevOps `Marketplace` 的 `Manage` scope）；工作流会优先使用 `VSCE_PAT`，没有该 secret 时才使用 OIDC。
 
 ## 许可证
 

@@ -65,6 +65,14 @@ jobs:
           name: splash-model-provider-vsix
           path: build/splash-model-provider.vsix
 
-      - name: Publish
-        if: github.event_name != 'workflow_dispatch' || inputs.dry_run != true
+      - name: Publish with PAT
+        if: env.VSCE_PAT != '' && (github.event_name != 'workflow_dispatch' || inputs.dry_run != true)
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: npx vsce publish --no-dependencies --skip-duplicate --githubBranch main
+
+      - name: Publish with OIDC
+        if: env.VSCE_PAT == '' && (github.event_name != 'workflow_dispatch' || inputs.dry_run != true)
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: npx vsce publish --no-dependencies --skip-duplicate --oidc --githubBranch main

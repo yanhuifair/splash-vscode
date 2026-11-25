@@ -304,7 +304,7 @@ git push origin v0.7.0
 
 Or run **Publish VS Code Extension** manually from GitHub Actions. Checking `dry_run` packages and uploads the VSIX artifact without publishing it to the Marketplace.
 
-One-off local publishing can still use a PAT: set `VSCE_PUBLISHER` and `VSCE_PAT`, then run `npm run publish:marketplace`. For ongoing releases, prefer the OIDC workflow.
+If OIDC returns `The requested publisher doesn't exist`, confirm the publisher has been created and verified in the Marketplace, and that a Trusted Publishing policy exists. For a temporary publish, add a `VSCE_PAT` secret in GitHub Actions (Azure DevOps `Marketplace` > `Manage` scope); the workflow prefers `VSCE_PAT` when present and falls back to OIDC.
 
 ## License
 
