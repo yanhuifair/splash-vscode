@@ -2,6 +2,8 @@
 
 [![VS Code 1.104+](https://img.shields.io/badge/VS%20Code-1.104%2B-007ACC?logo=visualstudiocode&logoColor=white)](https://code.visualstudio.com/) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
+[English](README.en.md) · **中文**
+
 把本地 `splash serve` 接入 VS Code 的聊天模型体系：模型选择器里出现 `Splash` 分组，其它扩展也能用 `vscode.lm.selectChatModels({ vendor: 'splash' })` 调用它。
 
 仓库：[yanhuifair/splash-vscode](https://github.com/yanhuifair/splash-vscode)
