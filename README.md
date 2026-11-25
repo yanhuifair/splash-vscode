@@ -286,14 +286,14 @@ VS Code 商店发布使用 `vsce`。推荐用 GitHub Actions + Trusted Publishin
 
 首次准备：
 
-1. 在 Visual Studio Marketplace 管理页创建 publisher。ID 建议用 `yanhuifair`，创建后不可修改。
+1. 在 Visual Studio Marketplace 管理页创建 publisher。当前使用的 ID 是 `fairyan`，创建后不可修改。
 2. 在该 publisher 的 **Trusted Publishing** 中添加策略：
    - Repository owner：`yanhuifair`
    - Repository：`splash-vscode`
    - Workflow：`publish.yml`
    - Environment：留空
 3. 在 GitHub 仓库 **Settings → Secrets and variables → Actions → Variables** 添加 `VSCE_PUBLISHER=<publisher ID>`。
-4. 本地 `package.json` 保持 `publisher: local`。CI 的优先级是手动输入 `publisher` > `VSCE_PUBLISHER` > 默认 `yanhuifair`，避免开发版和商店版 ID 混用。
+4. 本地 `package.json` 保持 `publisher: local`。CI 的优先级是手动输入 `publisher` > `VSCE_PUBLISHER` > 默认 `fairyan`，避免开发版和商店版 ID 混用。
 
 发布方式：
 

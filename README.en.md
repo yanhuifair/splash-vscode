@@ -286,14 +286,14 @@ Publishing uses `vsce`. The recommended path is GitHub Actions with Trusted Publ
 
 First-time setup:
 
-1. Create a publisher on the Visual Studio Marketplace management page. The ID `yanhuifair` is a reasonable choice; it cannot be changed after creation.
+1. Create a publisher on the Visual Studio Marketplace management page. The publisher ID used here is `fairyan`; it cannot be changed after creation.
 2. Add a **Trusted Publishing** policy to that publisher:
    - Repository owner: `yanhuifair`
    - Repository: `splash-vscode`
    - Workflow: `publish.yml`
    - Environment: empty
 3. In GitHub repository **Settings → Secrets and variables → Actions → Variables**, add `VSCE_PUBLISHER=<publisher ID>`.
-4. Keep `package.json` at `publisher: local` for local installs. CI resolves the publisher with this precedence: manual workflow input `publisher` > `VSCE_PUBLISHER` > default `yanhuifair`.
+4. Keep `package.json` at `publisher: local` for local installs. CI resolves the publisher with this precedence: manual workflow input `publisher` > `VSCE_PUBLISHER` > default `fairyan`.
 
 Publish a tagged version:
 
