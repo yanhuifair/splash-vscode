@@ -1,0 +1,246 @@
+{
+  "name": "splash-model-provider",
+  "displayName": "Splash",
+  "icon": "images/icon.png",
+  "description": "Connect VS Code Chat to a local splash model server.",
+  "version": "0.7.0",
+  "publisher": "local",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yanhuifair/splash-vscode.git"
+  },
+  "engines": {
+    "vscode": "^1.104.0"
+  },
+  "categories": [
+    "Other",
+    "Machine Learning"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished",
+    "onLanguageModelChatProvider:splash"
+  ],
+  "contributes": {
+    "languageModelChatProviders": [
+      {
+        "vendor": "splash",
+        "displayName": "Splash",
+        "icon": {
+          "light": "images/icon.png",
+          "dark": "images/icon.png"
+        },
+        "managementCommand": "splash.manage",
+        "configuration": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "title": "Splash URL",
+              "default": "http://127.0.0.1:8000",
+              "description": "splash serve 的地址。优先于 splash.baseUrl;末尾的 /v1 会被自动去掉。"
+            },
+            "models": {
+              "type": "array",
+              "title": "模型白名单",
+              "items": {
+                "type": "string"
+              },
+              "default": [],
+              "description": "只暴露这些完整模型 ID;留空表示使用服务返回的全部模型。可添加多个配置组连接不同服务。"
+            },
+            "headers": {
+              "type": "object",
+              "title": "自定义请求头",
+              "default": {},
+              "additionalProperties": {
+                "type": "string"
+              },
+              "description": "模型发现与聊天请求都会带上这些 header,例如自建网关的 X-API-Key。"
+            },
+            "apiKey": {
+              "type": "string",
+              "title": "API Key",
+              "default": "",
+              "secret": true,
+              "description": "对应 splash serve --api-key。由 VS Code 安全存储,优先于钥匙串和 splash.apiKey。"
+            }
+          }
+        }
+      }
+    ],
+    "commands": [
+      {
+        "command": "splash.refreshModels",
+        "title": "Splash: 刷新模型列表"
+      },
+      {
+        "command": "splash.checkServer",
+        "title": "Splash: 检查本地服务状态"
+      },
+      {
+        "command": "splash.setApiKey",
+        "title": "Splash: 设置 API Key(存系统钥匙串)"
+      },
+      {
+        "command": "splash.manage",
+        "title": "Splash: 管理 Splash 模型"
+      },
+      {
+        "command": "splash.diagnoseModels",
+        "title": "Splash: 诊断模型"
+      },
+      {
+        "command": "splash.openLog",
+        "title": "Splash: 打开日志"
+      }
+    ],
+    "configuration": {
+      "title": "Splash",
+      "properties": {
+        "splash.baseUrl": {
+          "type": "string",
+          "default": "http://127.0.0.1:8000",
+          "description": "splash serve 的地址。对应 --port/--host,例如 http://127.0.0.1:8001。末尾的 /v1 会被自动去掉。"
+        },
+        "splash.apiKey": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "如果 splash serve 使用了 `--api-key`,在这里填写同样的值。\n\n注意:这里是明文设置,会随 Settings Sync 同步。更安全的做法是执行 **Splash: 设置 API Key(存系统钥匙串)** —— 钥匙串里有值时以它为准。"
+        },
+        "splash.headers": {
+          "type": "object",
+          "default": {},
+          "additionalProperties": {
+            "type": "string"
+          },
+          "markdownDescription": "所有模型发现与聊天请求附带的自定义 HTTP header。配置组里的 `headers` 优先;没有配置组时使用这里的值。"
+        },
+        "splash.modelFilter": {
+          "type": "string",
+          "default": "",
+          "description": "只显示模型 ID 包含这些关键词的模型,逗号分隔;留空表示全部。"
+        },
+        "splash.maxOutputTokens": {
+          "type": "number",
+          "default": 8192,
+          "minimum": 1,
+          "description": "单次回复的最大 token 数,同时会从可用输入上下文中预留。"
+        },
+        "splash.temperature": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "default": null,
+          "description": "采样温度。留空(null)表示使用服务端默认值。"
+        },
+        "splash.reasoningEffort": {
+          "type": "string",
+          "enum": [
+            "server",
+            "none",
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh"
+          ],
+          "default": "server",
+          "description": "思考强度。server 表示不发送该参数,由服务端默认决定;其它值只有模型声明支持时才会下发。"
+        },
+        "splash.thinkingLevels": {
+          "type": "object",
+          "default": {},
+          "additionalProperties": {
+            "type": [
+              "string",
+              "boolean"
+            ]
+          },
+          "markdownDescription": "按**完整模型 ID**覆盖思考强度,例如 `\"unsloth/Qwen3.8-27B-GGUF:UD-Q8_K_XL\": \"low\"`。字符串用 `none`/`low`/`medium`/`high`/`xhigh`;布尔 `true`=服务端默认、`false`=关闭思考。未配置或不被模型支持时用 `splash.reasoningEffort`;改动对下一次请求生效。"
+        },
+        "splash.reasoningMode": {
+          "type": "string",
+          "enum": [
+            "off",
+            "stream",
+            "final"
+          ],
+          "default": "off",
+          "enumDescriptions": [
+            "不显示思考内容(默认,最省上下文)",
+            "思考内容随流式增量实时显示",
+            "等回复结束后一次性显示"
+          ],
+          "markdownDescription": "思考内容(`reasoning_content`)的显示方式。\n\n**默认 `off`**:稳定版 VS Code 还没有原生思考块,`stream`/`final` 只能把思考当正文文本发出去——它会留在会话历史里、每轮重新发给模型,白烧上下文。想看思考过程再打开,尤其是本地模型上下文本来就紧张。"
+        },
+        "splash.serverTokenizer": {
+          "type": "boolean",
+          "default": true,
+          "description": "用 splash 的 /tokenize 接口精确统计 token;关闭则使用字符估算。"
+        },
+        "splash.enableTools": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "向模型声明支持工具调用。关掉后 VS Code 不再往请求里塞工具 schema —— 小模型在 Agent 模式下被上百个工具压垮时,关掉它比调超时更有用(代价:不能用 Agent/工具)。"
+        },
+        "splash.maxToolsPerRequest": {
+          "type": "number",
+          "default": 0,
+          "minimum": 0,
+          "markdownDescription": "单个请求最多下发多少个工具 schema。`0`=不限制(默认);大于 0 时同时写入模型能力声明并在本地截断工具列表,避免本地模型被上百个工具压垮。"
+        },
+        "splash.requestTimeoutMs": {
+          "type": "number",
+          "default": 0,
+          "minimum": -1,
+          "markdownDescription": "单请求总上限(毫秒)。`0`=**不限制**(默认),交给 `splash serve --request-timeout`:服务端到期会返回 504,扩展原样报出状态码和响应体。"
+        },
+        "splash.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "在状态栏显示 splash 服务与当前模型。"
+        },
+        "splash.connectTimeoutMs": {
+          "type": "number",
+          "default": 0,
+          "minimum": -1,
+          "markdownDescription": "等待 splash **开始应答**(响应头)的毫秒数。`0`=**跟随服务**(默认,按 `/status` 的排队数与权重状态推导:`ready` 时 30s,`weights.released/restoring` 时 180s,每个排队请求再加 15s,上限 15min);`-1`=完全关闭;`>0`=手动固定。"
+        },
+        "splash.idleTimeoutMs": {
+          "type": "number",
+          "default": 0,
+          "minimum": -1,
+          "markdownDescription": "流式回复中**相邻两个数据块**的最大间隔(毫秒)。`0`=**跟随服务**(默认,取 `/status` 里历史请求平均耗时 `latency.http_request` 的 5 倍,限制在 5–30 分钟);`-1`=完全关闭(连接半开时不会被发现);`>0`=手动固定。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -w -p ./",
+    "lint": "eslint .",
+    "test": "node scripts/test.js",
+    "verify": "npm run lint && npm test",
+    "package": "mkdir -p build && vsce package --no-dependencies --allow-missing-repository -o build/splash-model-provider.vsix",
+    "vscode:prepublish": "npm run compile",
+    "smoke": "node scripts/smoke.js",
+    "install-ext": "npm run compile && node scripts/install.js",
+    "dev": "node scripts/dev.js",
+    "smoke:tools": "node scripts/toolCallsCheck.js",
+    "smoke:openai": "node scripts/openaiCheck.js",
+    "smoke:slow": "node scripts/slowServerErrorCheck.js",
+    "smoke:timeouts": "node scripts/timeoutCheck.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@types/node": "^22.20.5",
+    "@types/vscode": "^1.104.0",
+    "@vscode/vsce": "^4.1.1",
+    "eslint": "^9.39.5",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.73.0"
+  }
+}

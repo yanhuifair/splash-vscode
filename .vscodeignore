@@ -1,0 +1,12 @@
+.vscode/**
+.workbuddy/**
+.gitignore
+eslint.config.js
+src/**
+scripts/**
+node_modules/**
+dist/*.map
+*.vsix
+tsconfig.json
+AppIcon.icns
+build/**
