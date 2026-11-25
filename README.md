@@ -28,6 +28,7 @@
 - [超时策略](#超时策略)
 - [常见问题](#常见问题)
 - [开发](#开发)
+- [发布到 Microsoft Marketplace](#发布到-microsoft-marketplace)
 - [许可证](#许可证)
 
 ## 快速开始
@@ -278,6 +279,32 @@ SPLASH_BASE_URL=http://127.0.0.1:8001 SPLASH_API_KEY=xxx npm run smoke
 - `/status` 只用来推导超时：有上次结果时改为后台刷新，不再让每条消息都等它。
 - 截断提示只在 `max_tokens >= 256` 的真实生成里显示：VS Code 生成会话标题之类的小请求只有几十 token，
   同样会 `finish=length`，把提示写进去会被当成会话标题。
+
+## 发布到 Microsoft Marketplace
+
+VS Code 商店发布使用 `vsce`。推荐用 GitHub Actions + Trusted Publishing（OIDC），不再保存长期 PAT；Azure DevOps 全局 PAT 会在 2026-12-01 退役。
+
+首次准备：
+
+1. 在 Visual Studio Marketplace 管理页创建 publisher。ID 建议用 `yanhuifair`，创建后不可修改。
+2. 在该 publisher 的 **Trusted Publishing** 中添加策略：
+   - Repository owner：`yanhuifair`
+   - Repository：`splash-vscode`
+   - Workflow：`publish.yml`
+   - Environment：留空
+3. 在 GitHub 仓库 **Settings → Secrets and variables → Actions → Variables** 添加 `VSCE_PUBLISHER=<publisher ID>`。
+4. 本地 `package.json` 保持 `publisher: local`，CI 会用 `VSCE_PUBLISHER` 覆盖商店 ID，避免开发版和商店版 ID 混用。
+
+发布方式：
+
+```bash
+git tag v0.7.0
+git push origin v0.7.0
+```
+
+或在 Actions 手动运行 **Publish VS Code Extension**。勾选 `dry_run` 只打包并上传 VSIX，不发布商店。
+
+一次性本地发布仍可用 PAT：先设置 `VSCE_PUBLISHER` 和 `VSCE_PAT`，再执行 `npm run publish:marketplace`。长期发布建议走 OIDC 工作流。
 
 ## 许可证
 

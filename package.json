@@ -225,6 +225,8 @@
     "test": "node scripts/test.js",
     "verify": "npm run lint && npm test",
     "package": "mkdir -p build && vsce package --no-dependencies --allow-missing-repository -o build/splash-model-provider.vsix",
+    "publish:marketplace": "npm run verify && vsce publish --no-dependencies --skip-duplicate --githubBranch main",
+    "publish:marketplace:oidc": "npm run verify && vsce publish --no-dependencies --skip-duplicate --oidc --githubBranch main",
     "vscode:prepublish": "npm run compile",
     "smoke": "node scripts/smoke.js",
     "install-ext": "npm run compile && node scripts/install.js",

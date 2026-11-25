@@ -28,6 +28,7 @@ Repository: [yanhuifair/splash-vscode](https://github.com/yanhuifair/splash-vsco
 - [Timeout Policy](#timeout-policy)
 - [Troubleshooting](#troubleshooting)
 - [Development](#development)
+- [Publish to the VS Code Marketplace](#publish-to-the-vs-code-marketplace)
 - [License](#license)
 
 ## Quick Start
@@ -278,6 +279,32 @@ SPLASH_BASE_URL=http://127.0.0.1:8001 SPLASH_API_KEY=xxx npm run smoke
 - `/status` is used only for timeout inference. If a previous result exists, it is refreshed in the background instead of blocking every message.
 - Truncation notices are shown only for real generations with `max_tokens >= 256`. VS Code title requests use a few dozen tokens and also return
   `finish=length`; adding the notice there can pollute the chat title.
+
+## Publish to the VS Code Marketplace
+
+Publishing uses `vsce`. The recommended path is GitHub Actions with Trusted Publishing (OIDC), so no long-lived Personal Access Token needs to be stored. Global Azure DevOps PATs are retired on December 1, 2026.
+
+First-time setup:
+
+1. Create a publisher on the Visual Studio Marketplace management page. The ID `yanhuifair` is a reasonable choice; it cannot be changed after creation.
+2. Add a **Trusted Publishing** policy to that publisher:
+   - Repository owner: `yanhuifair`
+   - Repository: `splash-vscode`
+   - Workflow: `publish.yml`
+   - Environment: empty
+3. In GitHub repository **Settings → Secrets and variables → Actions → Variables**, add `VSCE_PUBLISHER=<publisher ID>`.
+4. Keep `package.json` at `publisher: local` for local installs. CI overwrites it with `VSCE_PUBLISHER` so development and Marketplace IDs do not get mixed.
+
+Publish a tagged version:
+
+```bash
+git tag v0.7.0
+git push origin v0.7.0
+```
+
+Or run **Publish VS Code Extension** manually from GitHub Actions. Checking `dry_run` packages and uploads the VSIX artifact without publishing it to the Marketplace.
+
+One-off local publishing can still use a PAT: set `VSCE_PUBLISHER` and `VSCE_PAT`, then run `npm run publish:marketplace`. For ongoing releases, prefer the OIDC workflow.
 
 ## License
 
