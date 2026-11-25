@@ -293,7 +293,7 @@ First-time setup:
    - Workflow: `publish.yml`
    - Environment: empty
 3. In GitHub repository **Settings → Secrets and variables → Actions → Variables**, add `VSCE_PUBLISHER=<publisher ID>`.
-4. Keep `package.json` at `publisher: local` for local installs. CI overwrites it with `VSCE_PUBLISHER` so development and Marketplace IDs do not get mixed.
+4. Keep `package.json` at `publisher: local` for local installs. CI resolves the publisher with this precedence: manual workflow input `publisher` > `VSCE_PUBLISHER` > default `yanhuifair`.
 
 Publish a tagged version:
 

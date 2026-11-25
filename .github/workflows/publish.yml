@@ -3,6 +3,11 @@ name: Publish VS Code Extension
 on:
   workflow_dispatch:
     inputs:
+      publisher:
+        description: Marketplace publisher ID; falls back to VSCE_PUBLISHER or yanhuifair
+        required: false
+        type: string
+        default: ''
       dry_run:
         description: Package only; do not publish to Marketplace
         type: boolean
@@ -42,13 +47,14 @@ jobs:
 
       - name: Set Marketplace publisher
         env:
+          INPUT_PUBLISHER: ${{ inputs.publisher }}
           VSCE_PUBLISHER: ${{ vars.VSCE_PUBLISHER }}
         run: |
-          if [ -z "$VSCE_PUBLISHER" ]; then
-            echo "::error::Repository variable VSCE_PUBLISHER is required."
-            exit 1
-          fi
-          npm pkg set publisher="$VSCE_PUBLISHER"
+          publisher="$INPUT_PUBLISHER"
+          if [ -z "$publisher" ]; then publisher="$VSCE_PUBLISHER"; fi
+          if [ -z "$publisher" ]; then publisher="yanhuifair"; fi
+          echo "Using Marketplace publisher: $publisher"
+          npm pkg set publisher="$publisher"
 
       - name: Package
         run: npm run package

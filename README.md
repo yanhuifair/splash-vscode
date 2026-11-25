@@ -293,7 +293,7 @@ VS Code 商店发布使用 `vsce`。推荐用 GitHub Actions + Trusted Publishin
    - Workflow：`publish.yml`
    - Environment：留空
 3. 在 GitHub 仓库 **Settings → Secrets and variables → Actions → Variables** 添加 `VSCE_PUBLISHER=<publisher ID>`。
-4. 本地 `package.json` 保持 `publisher: local`，CI 会用 `VSCE_PUBLISHER` 覆盖商店 ID，避免开发版和商店版 ID 混用。
+4. 本地 `package.json` 保持 `publisher: local`。CI 的优先级是手动输入 `publisher` > `VSCE_PUBLISHER` > 默认 `yanhuifair`，避免开发版和商店版 ID 混用。
 
 发布方式：
 
