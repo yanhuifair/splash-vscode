@@ -299,9 +299,11 @@ VS Code 商店发布使用 `vsce`。推荐用 GitHub Actions + Trusted Publishin
 
 发布方式：
 
+先把 `package.json` 的 `version` 升到新版本号，再打 tag：
+
 ```bash
-git tag v0.7.0
-git push origin v0.7.0
+git tag vX.Y.Z
+git push origin vX.Y.Z
 ```
 
 或在 Actions 手动运行 **Publish VS Code Extension**。勾选 `dry_run` 只打包并上传 VSIX，不发布商店。

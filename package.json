@@ -3,7 +3,7 @@
   "displayName": "Splash Local Model Provider",
   "icon": "images/icon.png",
   "description": "Connect VS Code Chat to a local splash model server.",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "publisher": "local",
   "license": "MIT",
   "repository": {

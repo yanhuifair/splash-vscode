@@ -299,9 +299,11 @@ First-time setup:
 
 Publish a tagged version:
 
+Bump `version` in `package.json` first, then tag:
+
 ```bash
-git tag v0.7.0
-git push origin v0.7.0
+git tag vX.Y.Z
+git push origin vX.Y.Z
 ```
 
 Or run **Publish VS Code Extension** manually from GitHub Actions. Checking `dry_run` packages and uploads the VSIX artifact without publishing it to the Marketplace.
