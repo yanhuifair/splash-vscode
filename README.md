@@ -235,8 +235,10 @@ SPLASH_BASE_URL=http://127.0.0.1:8001 SPLASH_API_KEY=xxx npm run smoke
   header、密钥、超时与 token 数，`secret: true` 的 `apiKey` 只参与组 key 哈希，不会写进日志。
 - 模型元数据来自 `/v1/models` 的 `context_length`、`vision`、`input_modalities`、`reasoning.efforts`，
   用于填 VS Code 的 `maxInputTokens` / `capabilities`。
-- 图标为 `images/icon.png`，由 `AppIcon.icns` 导出；provider 图标用
-  `languageModelChatProviders[].icon` 的 `{ light, dark }` 形式指向同一张图。
+- 图标源文件是 `images/icon-master.png`（1024×1024，由 `AppIcon.icon` 在 Icon Composer 里导出），
+  `npm run icon` 用 `sips -Z 512` 生成上架用的 `images/icon.png`；源文件和 `AppIcon.icon` 都在
+  `.vscodeignore` 里，不进 vsix。provider 图标用 `languageModelChatProviders[].icon` 的
+  `{ light, dark }` 形式指向同一张图。
 
 #### 思考内容的实现
 

@@ -234,7 +234,8 @@
     "smoke:tools": "node scripts/toolCallsCheck.js",
     "smoke:openai": "node scripts/openaiCheck.js",
     "smoke:slow": "node scripts/slowServerErrorCheck.js",
-    "smoke:timeouts": "node scripts/timeoutCheck.js"
+    "smoke:timeouts": "node scripts/timeoutCheck.js",
+    "icon": "sips -Z 512 --out images/icon.png images/icon-master.png"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

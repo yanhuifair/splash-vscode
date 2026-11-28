@@ -9,5 +9,6 @@ node_modules/**
 dist/*.map
 *.vsix
 tsconfig.json
-AppIcon.icns
+AppIcon.icon/**
+images/icon-master.png
 build/**

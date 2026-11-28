@@ -234,7 +234,9 @@ SPLASH_BASE_URL=http://127.0.0.1:8001 SPLASH_API_KEY=xxx npm run smoke
   headers, secrets, timeouts, and token counts independently. The `secret: true` `apiKey` participates only in the group-key hash and is never logged.
 - Model metadata comes from `/v1/models`: `context_length`, `vision`, `input_modalities`, and `reasoning.efforts`,
   which are mapped to VS Code's `maxInputTokens` and `capabilities`.
-- The icon is `images/icon.png`, exported from `AppIcon.icns`. The provider icon uses
+- The icon master is `images/icon-master.png` (1024x1024, exported from `AppIcon.icon` in Icon Composer);
+  `npm run icon` runs `sips -Z 512` to produce the shipping `images/icon.png`. The master and `AppIcon.icon`
+  are listed in `.vscodeignore`, so neither lands in the vsix. The provider icon uses
   `languageModelChatProviders[].icon` in `{ light, dark }` form pointing to the same image.
 
 #### Thinking Implementation
